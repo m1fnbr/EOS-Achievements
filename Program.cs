@@ -29,7 +29,7 @@ namespace Claimer
                 string body = @$"[""{i}""]";
                 request.AddParameter("application/json", body, ParameterType.RequestBody);
                 IRestResponse response = client.Execute(request);
-                Console.WriteLine("Unlocked: (" + i + "/" + "88) Achievements \n");
+                Console.WriteLine("Unlocked: (" + i + "/" + "89) Achievements \n");
                 if (i < 89)
                 {
                     Console.Clear();
