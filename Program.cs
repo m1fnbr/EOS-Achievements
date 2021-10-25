@@ -13,6 +13,7 @@ namespace Claimer
         static void Main(string[] args)
         {
             Utils.Log("Grabbing GetUserAuthToken");
+            Auth.GetUserAuthToken();
             Achievements.unlockall();
             Console.Read();
         }

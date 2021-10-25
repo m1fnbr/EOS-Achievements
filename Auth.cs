@@ -6,6 +6,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
 using System.Diagnostics;
+using System.Net;
 
 namespace Claimer
 {
@@ -33,6 +34,16 @@ namespace Claimer
             request.AddParameter("code", $"{GetAuthCode()}");
             IRestResponse response = client.Execute(request);
             string accesstoken = (string)JObject.Parse(response.Content)["access_token"];
+
+            if(response.StatusCode == HttpStatusCode.BadRequest)
+            {
+                Utils.Log("Invalid Auth Code Please Try Again");
+                Thread.Sleep(2000);
+                Console.Clear();
+                ConvertAuthCodeToAccessToken();
+
+            }
+
             return accesstoken;
         }
         public static string GetExchangeCode()
