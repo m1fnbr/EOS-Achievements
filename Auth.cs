@@ -5,17 +5,48 @@ using RestSharp;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Claimer
 {
     public class Auth
     {
-        static string GetExternalAuthToken()
-        {
-            //Enter Exchange Code
-            Console.WriteLine("Enter Exchange Code: ");
-            string exchangecode = Console.ReadLine();
 
+        public static string AuthToken;
+        public static string ProductUserID;
+        public static string deploymentID;
+        public static string GetAuthCode()
+        {
+            Utils.Brave("https://www.epicgames.com/id/api/redirect?clientId=ec684b8c687f479fadea3cb2ad83f5c6&responseType=code");
+            Utils.Log("Please Enter Auth Code: ");
+            string authcode = Console.ReadLine();
+            return authcode;
+        }
+        public static string ConvertAuthCodeToAccessToken()
+        {
+            var client = new RestClient("https://account-public-service-prod.ol.epicgames.com/account/api/oauth/token");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("Authorization", "basic ZWM2ODRiOGM2ODdmNDc5ZmFkZWEzY2IyYWQ4M2Y1YzY6ZTFmMzFjMjExZjI4NDEzMTg2MjYyZDM3YTEzZmM4NGQ=");
+            request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
+            request.AddParameter("grant_type", "authorization_code");
+            request.AddParameter("code", $"{GetAuthCode()}");
+            IRestResponse response = client.Execute(request);
+            string accesstoken = (string)JObject.Parse(response.Content)["access_token"];
+            return accesstoken;
+        }
+        public static string GetExchangeCode()
+        {
+            var client = new RestClient("https://account-public-service-prod.ol.epicgames.com/account/api/oauth/exchange");
+            client.Timeout = -1;
+            var request = new RestRequest(Method.GET);
+            request.AddHeader("Authorization", $"Bearer {ConvertAuthCodeToAccessToken()}");
+            IRestResponse response = client.Execute(request);
+            string exchangecode = (string)JObject.Parse(response.Content)["code"];
+            return exchangecode;
+        }
+        public static string GetExternalAuthToken()
+        {
             //Excuting the Request to get AuthToken
             var client = new RestClient("https://api.epicgames.dev/epic/oauth/v1/token");
             client.Timeout = -1;
@@ -24,17 +55,16 @@ namespace Claimer
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "exchange_code");
             request.AddParameter("deployment_id", "da32ae9c12ae40e8a112c52e1f17f3ba");
-            request.AddParameter("exchange_code", $"{exchangecode}");
+            request.AddParameter("exchange_code", $"{GetExchangeCode()}");
             request.AddParameter("scope", "basic_profile friends_list presence friends_management");
             IRestResponse response = client.Execute(request);
 
 
             //parsing response to get the token
-            string ExternalAuthToken = (string)JObject.Parse(response.Content)["access_token"];
+           string ExternalAuthToken = (string)JObject.Parse(response.Content)["access_token"];
+          
             return ExternalAuthToken;
         }
-
-
         public static void GetUserAuthToken()
         {
 
@@ -53,11 +83,9 @@ namespace Claimer
 
 
             //parsing the response
-            string AuthToken = (string)JObject.Parse(response.Content)["access_token"];
-            string ProductUserID = (string)JObject.Parse(response.Content)["product_user_id"];
-            string deploymentID = (string)JObject.Parse(response.Content)["deployment_id"];
-
-            Achievements.unlockall(AuthToken, ProductUserID, deploymentID);
+             AuthToken = (string)JObject.Parse(response.Content)["access_token"];
+             ProductUserID = (string)JObject.Parse(response.Content)["product_user_id"];
+             deploymentID = (string)JObject.Parse(response.Content)["deployment_id"];
         }
     }
 }
