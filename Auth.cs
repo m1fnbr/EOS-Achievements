@@ -18,7 +18,7 @@ namespace Claimer
         public static string deploymentID;
         public static string GetAuthCode()
         {
-            Utils.Brave("https://www.epicgames.com/id/api/redirect?clientId=ec684b8c687f479fadea3cb2ad83f5c6&responseType=code");
+            Utils.Browse("https://www.epicgames.com/id/api/redirect?clientId=ec684b8c687f479fadea3cb2ad83f5c6&responseType=code");
             Utils.Log("Please Enter Auth Code: ");
             string authcode = Console.ReadLine();
             return authcode;
