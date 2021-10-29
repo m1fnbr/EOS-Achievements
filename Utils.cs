@@ -5,6 +5,7 @@ using System.Drawing;
 using Console = Colorful.Console;
 using Colorful;
 using System.Diagnostics;
+using Microsoft.Win32;
 
 namespace Claimer
 {
@@ -21,17 +22,6 @@ namespace Claimer
             };
             Console.WriteLineFormatted(Format,Color.White, Formatting);
         }
-
-        /*public static void Brave(string URL)
-        {
-            Process process = new Process();
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.FileName = "C:\\Program Files\\BraveSoftware\\Brave-Browser\\Application\\Brave.exe";
-            startInfo.Arguments = $"https://www.epicgames.com/id/api/redirect?clientId=ec684b8c687f479fadea3cb2ad83f5c6&responseType=code";
-            process.StartInfo = startInfo;
-            process.Start();
-        } */
     public static void Browse(string url)
     {
         string browserName = "iexplore.exe";
@@ -50,7 +40,7 @@ namespace Claimer
                         browserName = "safari.exe";
                     else if (progIdValue.ToString().ToLower().Contains("opera"))
                         browserName = "opera.exe";
-                    else if (prodIDValue,ToString().ToLower().Containts("brave")
+                    else if (progIdValue.ToString().ToLower().Contains("brave"))
                              browserName = "brave.exe";
                 }
             }
