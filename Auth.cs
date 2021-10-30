@@ -21,6 +21,7 @@ namespace Claimer
             Utils.Browse("https://www.epicgames.com/id/api/redirect?clientId=ec684b8c687f479fadea3cb2ad83f5c6&responseType=code");
             Utils.Log("Please Enter Auth Code: ");
             string authcode = Console.ReadLine();
+            Console.Clear();
             return authcode;
         }
         public static string ConvertAuthCodeToAccessToken()
