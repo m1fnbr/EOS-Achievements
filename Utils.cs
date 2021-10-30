@@ -6,6 +6,8 @@ using Console = Colorful.Console;
 using Colorful;
 using System.Diagnostics;
 using Microsoft.Win32;
+using System.Linq;
+
 
 namespace Claimer
 {
@@ -43,5 +45,5 @@ namespace Claimer
                 Process.Start(new ProcessStartInfo(Browser, url));
             }
         }
-        }
     }
+}

@@ -24,3 +24,4 @@ obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.AssemblyInfo.cs
 obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.csproj.CopyComplete
 obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.csproj.FileListAbsolute.txt
 obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.pdb
+*.v2

@@ -58,16 +58,26 @@ namespace Claimer
         }
         public static string GetExternalAuthToken()
         {
+
+
             //Excuting the Request to get AuthToken
             var client = new RestClient("https://api.epicgames.dev/epic/oauth/v1/token");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
-            request.AddHeader("Authorization", "Basic eHl6YTc4OTFwNUQ3czlSNkdtNm1vVEhXR2xvZXJwN0I6S25oMThkdTROVmxGcyszdVErWlBwRENWdG8wV1lmNHlYUDgrT2N3VnQxbw==");
+            if (Achievements.RocketLeague == true)
+            {
+                request.AddHeader("Authorization", Structs.ClientTokens.RocketLeague);
+                request.AddParameter("deployment_id", Structs.DeploymentIDs.RocketLeague);
+            }
+            else if (Achievements.RocketLeague == true)
+            {
+                request.AddHeader("Authorization", Structs.ClientTokens.Kena);
+                request.AddParameter("deployment_id", Structs.DeploymentIDs.Kena);
+            }
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "exchange_code");
-            request.AddParameter("deployment_id", "da32ae9c12ae40e8a112c52e1f17f3ba");
             request.AddParameter("exchange_code", $"{GetExchangeCode()}");
-            request.AddParameter("scope", "basic_profile friends_list presence friends_management");
+            request.AddParameter("scope", "basic_profile friends_list presence");
             IRestResponse response = client.Execute(request);
 
 
@@ -83,9 +93,19 @@ namespace Claimer
             var client = new RestClient("https://api.epicgames.dev/auth/v1/oauth/token");
             client.Timeout = -1;
             var request = new RestRequest(Method.POST);
+
+            if (Achievements.RocketLeague == true)
+            {
+                request.AddHeader("Authorization", Structs.ClientTokens.RocketLeague);
+                request.AddParameter("deployment_id", Structs.DeploymentIDs.RocketLeague);
+            }
+            else if (Achievements.RocketLeague == true)
+            {
+                request.AddHeader("Authorization", Structs.ClientTokens.Kena);
+                request.AddParameter("deployment_id", Structs.DeploymentIDs.Kena);
+            }
+
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
-            request.AddHeader("Authorization", "Basic eHl6YTc4OTFwNUQ3czlSNkdtNm1vVEhXR2xvZXJwN0I6S25oMThkdTROVmxGcyszdVErWlBwRENWdG8wV1lmNHlYUDgrT2N3VnQxbw==");
-            request.AddParameter("deployment_id", "da32ae9c12ae40e8a112c52e1f17f3ba");
             request.AddParameter("nonce", "2W5vgU-FxESeNw2tADe2Zg");
             request.AddParameter("external_auth_type", "epicgames_access_token");
             request.AddParameter("grant_type", "external_auth");
