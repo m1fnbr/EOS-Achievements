@@ -28,7 +28,6 @@ obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.pdb
 RocketLeagueAchievementsClaimer.sln
 *.props
 EOS-Achievements.sln
-EOS-Achievements.csproj
 *.exe
 *.pdb
 obj/Release/netcoreapp3.1/EOS-Achievements.AssemblyInfo.cs
