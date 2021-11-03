@@ -26,3 +26,15 @@ obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.csproj.FileListAbsolut
 obj/Release/netcoreapp3.1/RocketLeagueAchievementsClaimer.pdb
 *.v2
 RocketLeagueAchievementsClaimer.sln
+*.props
+EOS-Achievements.sln
+EOS-Achievements.csproj
+*.exe
+*.pdb
+obj/Release/netcoreapp3.1/EOS-Achievements.AssemblyInfo.cs
+obj/EOS-Achievements.csproj.nuget.g.targets
+obj/Release/netcoreapp3.1/EOS-Achievements.csproj.CopyComplete
+obj/Release/netcoreapp3.1/EOS-Achievements.csproj.FileListAbsolute.txt
+.vs/EOS-Achievements/v16/.suo
+RocketLeagueAchievementsClaimer.csproj
+RocketLeagueAchievementsClaimer.csproj

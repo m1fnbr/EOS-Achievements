@@ -1,14 +1,10 @@
 ﻿using System;
 using Newtonsoft.Json.Linq;
-using Newtonsoft.Json;
 using RestSharp;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Threading;
-using System.Diagnostics;
 using System.Net;
 
-namespace Claimer
+namespace EOSAchievements
 {
     public class Auth
     {
@@ -16,6 +12,8 @@ namespace Claimer
         public static string AuthToken;
         public static string ProductUserID;
         public static string deploymentID;
+        public static bool RocketLeague;
+        public static bool Kena;
         public static string GetAuthCode()
         {
             Utils.Browse("https://www.epicgames.com/id/api/redirect?clientId=ec684b8c687f479fadea3cb2ad83f5c6&responseType=code");
@@ -26,14 +24,14 @@ namespace Claimer
         }
         public static string ConvertAuthCodeToAccessToken()
         {
-            var client = new RestClient("https://account-public-service-prod.ol.epicgames.com/account/api/oauth/token");
-            client.Timeout = -1;
+            var restclient = new RestClient("https://account-public-service-prod.ol.epicgames.com/account/api/oauth/token");
+            restclient.Timeout = -1;
             var request = new RestRequest(Method.POST);
             request.AddHeader("Authorization", "basic ZWM2ODRiOGM2ODdmNDc5ZmFkZWEzY2IyYWQ4M2Y1YzY6ZTFmMzFjMjExZjI4NDEzMTg2MjYyZDM3YTEzZmM4NGQ=");
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "authorization_code");
             request.AddParameter("code", $"{GetAuthCode()}");
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = restclient.Execute(request);
             string accesstoken = (string)JObject.Parse(response.Content)["access_token"];
 
             if(response.StatusCode == HttpStatusCode.BadRequest)
@@ -62,24 +60,24 @@ namespace Claimer
 
 
             //Excuting the Request to get AuthToken
-            var client = new RestClient("https://api.epicgames.dev/epic/oauth/v1/token");
-            client.Timeout = -1;
+            var restclient = new RestClient("https://api.epicgames.dev/epic/oauth/v1/token");
+            restclient.Timeout = -1;
             var request = new RestRequest(Method.POST);
-            if (Achievements.RocketLeague == true)
+            if (RocketLeague == true)
             {
-                request.AddHeader("Authorization", Structs.ClientTokens.RocketLeague);
+                request.AddHeader("Authorization", "Basic " + Structs.ClientTokens.RocketLeague);
                 request.AddParameter("deployment_id", Structs.DeploymentIDs.RocketLeague);
             }
-            else if (Achievements.RocketLeague == true)
+            else if (Kena == true)
             {
-                request.AddHeader("Authorization", Structs.ClientTokens.Kena);
+                request.AddHeader("Authorization", "Basic " + Structs.ClientTokens.Kena);
                 request.AddParameter("deployment_id", Structs.DeploymentIDs.Kena);
             }
             request.AddHeader("Content-Type", "application/x-www-form-urlencoded");
             request.AddParameter("grant_type", "exchange_code");
             request.AddParameter("exchange_code", $"{GetExchangeCode()}");
             request.AddParameter("scope", "basic_profile friends_list presence");
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = restclient.Execute(request);
 
 
             //parsing response to get the token
@@ -91,18 +89,18 @@ namespace Claimer
         {
 
             //executing the request
-            var client = new RestClient("https://api.epicgames.dev/auth/v1/oauth/token");
-            client.Timeout = -1;
+            var restclient = new RestClient("https://api.epicgames.dev/auth/v1/oauth/token");
+            restclient.Timeout = -1;
             var request = new RestRequest(Method.POST);
 
-            if (Achievements.RocketLeague == true)
+            if (RocketLeague == true)
             {
-                request.AddHeader("Authorization", Structs.ClientTokens.RocketLeague);
+                request.AddHeader("Authorization", "Basic " + Structs.ClientTokens.RocketLeague);
                 request.AddParameter("deployment_id", Structs.DeploymentIDs.RocketLeague);
             }
-            else if (Achievements.RocketLeague == true)
+            else if (Kena == true)
             {
-                request.AddHeader("Authorization", Structs.ClientTokens.Kena);
+                request.AddHeader("Authorization", "Basic " + Structs.ClientTokens.Kena);
                 request.AddParameter("deployment_id", Structs.DeploymentIDs.Kena);
             }
 
@@ -111,7 +109,7 @@ namespace Claimer
             request.AddParameter("external_auth_type", "epicgames_access_token");
             request.AddParameter("grant_type", "external_auth");
             request.AddParameter("external_auth_token", $"{GetExternalAuthToken()}");
-            IRestResponse response = client.Execute(request);
+            IRestResponse response = restclient.Execute(request);
 
 
             //parsing the response

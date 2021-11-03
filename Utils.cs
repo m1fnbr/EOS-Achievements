@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Drawing;
+﻿using System.Drawing;
 using Console = Colorful.Console;
 using Colorful;
 using System.Diagnostics;
 using Microsoft.Win32;
-using System.Linq;
 
 
-namespace Claimer
+namespace EOSAchievements
 {
     class Utils
     {
@@ -44,6 +40,15 @@ namespace Claimer
                 }
                 Process.Start(new ProcessStartInfo(Browser, url));
             }
+        }
+        public static void CheckForEligibleProcess()
+        {
+            // Forgor Kena Process Name lol, CBA to reinstall but it works lol
+            Process[] RocketLeague = Process.GetProcessesByName("RocketLeague");
+            if (RocketLeague.Length > 0) { Auth.RocketLeague = true; return; }
+            else Utils.Log("No Eligible Processes Running, Do you mean to claim all achievements on Kena?"); string response = Console.ReadLine();
+
+            if (response == "yes") { Console.Clear(); Auth.Kena = true; } else if (response == "no") ; Utils.Log("Restarting"); Console.Clear(); CheckForEligibleProcess();
         }
     }
 }
